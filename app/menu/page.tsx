@@ -1,14 +1,9 @@
 "use client"
 
 import { Button } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
+import { navigateToPage } from "../utils/functions";
 
-export default function AtmUI() {
-    const router = useRouter();
-    const navigateToPage = (page: string) => {
-        router.push('/'+page);
-    }
-
+const menuPage: React.FC = () => {
     return (
         <section className="bg-radial to-black from-blue-950 w-screen h-screen text-white font-gotham">
             <h1 className="text-[5rem] py-10 text-center font-bold font-fira">Welcome to smart ATM</h1>
@@ -21,3 +16,5 @@ export default function AtmUI() {
         </section>
     );
 }
+
+export default menuPage;

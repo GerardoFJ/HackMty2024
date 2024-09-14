@@ -1,11 +1,10 @@
 import { NextUIProvider } from "@nextui-org/react";
-import Image from "next/image";
-import AtmUI from "./components/atmUI";
+import StartScreen from "./components/startScreen";
 
 export default function Home() {
   return (
     <NextUIProvider>
-        <AtmUI />
+        <StartScreen />
     </NextUIProvider>
   );
 }
