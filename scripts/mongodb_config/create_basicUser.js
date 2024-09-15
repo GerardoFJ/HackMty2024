@@ -4,7 +4,7 @@ const path = require('path');
 require('dotenv').config();
 
 // Connection configuration
-const uri = 'mongodb+srv://tacolon27:9DpZSCqmoC10ABkf@hackmty2024.90ahx.mongodb.net/?retryWrites=true&w=majority&appName=HackMTY2024';
+const uri = process.env.MONGO_URI;
 if (!uri) {
   throw new Error("MONGO_URI not found in .env file");
 }

@@ -38,7 +38,7 @@ export default function Menu({
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V2m0 12V8m-8 4h8m-4-4v4m2 2v4m0-8h8m-4 4v4" />
                     </svg>
                     </div>
-            </div>
+                </div>
             </div>
         </div>
         <div>{children}</div>
