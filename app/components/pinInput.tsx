@@ -10,7 +10,7 @@ export default function ATMKeypad({ money = false }) {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigateToPage("") // Replace 'home' with the actual home page URL
+      navigateToPage("")
     }, 20000) // 20 seconds
 
     return () => clearTimeout(timer)

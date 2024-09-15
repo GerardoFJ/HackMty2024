@@ -17,12 +17,10 @@ const withdrawalPage: React.FC = () => {
     }, [amount]);
 
     return (
-        <section className="bg-radial to-black from-blue-950 w-screen h-screen text-white font-gotham">
-            <Image src="/assets/leftArrow.png" alt="atm" width={200} height={200} className="absolute top-5 left-5 h-14 w-auto object-cover hover:cursor-pointer" onClick={() => navigateToPage("menu")} />
-            <h1 className="text-[5rem] py-10 text-center font-bold font-fira text-green-500">Withdrawal</h1>
-            <h2 className="text-[3rem] text-center text-gray-500">Choose amount</h2>
+        <section>
+            <h1 className="text-[3rem] py-0 text-center font-bold font-fira text-white mt-5">Withdrawal</h1>
             {!otherAmount ? (
-                <section className="grid grid-cols-4 gap-10 px-10 mt-28">
+                <section className="grid grid-cols-4 gap-10 px-20 mt-10">
                     <Button onClick={() => setAmount(100)} className="h-28 text-[2rem] bg-white text-left w-full">100</Button>
                     <Button onClick={() => setAmount(200)} className="h-28 text-[2rem] bg-white text-left w-full">200</Button>
                     <Button onClick={() => setAmount(500)} className="h-28 text-[2rem] bg-white text-left w-full">500</Button>
