@@ -27,6 +27,7 @@ const menuPage: React.FC = () => {
    
      const { activate, setActivate } = activateContext;
     useEffect(() => {
+        Activated.current = false;
         if(!activate){
         console.log("Head activated");
         handleStartListening();

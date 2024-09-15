@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import VirtualMouse from './VirtualMouse';
 import { Braah_One } from 'next/font/google';
-
+import { useHandsFree } from "../utils/handsFree";
 interface VisionComponentProps {
   activate: boolean; // Define the type of the prop
 }
@@ -17,7 +17,16 @@ export default function VisionComponent(
   const [active, setActive] = useState(false);
   const [started, setStarted] = useState(false);
   const activateRef = useRef(active);
-
+  const {
+    trigger,
+    output,
+    click,
+    focusedButton,
+    buttonsRef,
+    handleStartListening,
+    fetchRealTimeOutput_Head,
+    Activated
+} = useHandsFree();
     const handleMouseClick = (x: number, y: number) => {
     const element = document.elementFromPoint(x, y);
     if (element) {
@@ -28,6 +37,7 @@ export default function VisionComponent(
     activateRef.current = activate;
     console.log(`Activate: ${activate}`);
     if(activateRef.current && !started) {
+      Activated.current = false;
       setStarted(true);
       console.log('Starting vision script');
       fetchRealTimeOutput();
@@ -112,6 +122,7 @@ export default function VisionComponent(
         
       }
       setActive(false);
+      
     }
 };
 
