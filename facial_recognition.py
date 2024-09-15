@@ -1,9 +1,9 @@
 from deepface import DeepFace
 import os
+import cv2
+import tempfile
+
 from datetime import datetime
-
-current_time = datetime.now()
-
 
 # Rutas a las carpetas de imágenes
 image_folder = "imgs/"
@@ -46,11 +46,37 @@ def is_user(image_path):
             continue
     return None
 
+def capture_image():
+    # Inicializa la cámara
+    cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        print("No se pudo abrir la cámara.")
+        return None
+
+    print("Capturando imagen...")
+
+    # Captura una imagen
+    ret, frame = cap.read()
+    cap.release()
+
+    if not ret:
+        print("No se pudo capturar la imagen.")
+        return None
+
+    # Crea un archivo temporal para guardar la imagen
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.jpg')
+    cv2.imwrite(temp_file.name, frame)
+
+    return temp_file.name
+
 def main():
-    comprobation_image = os.path.join(image_folder,"comprobations/comprobacion_user2.jpeg")
-    
+    comprobation_image = capture_image()
+    if comprobation_image is None:
+        print("Error al capturar la imagen.")
+        return
+
     if is_criminal(comprobation_image):
-        print("\n\n\nAlerta de seguridad! Acceso denegado\n\n\n")
+        print("\n\n\n¡Alerta de seguridad! Acceso denegado\n\n\n")
     else:
         user = is_user(comprobation_image)
         if user:
@@ -58,7 +84,11 @@ def main():
         else:
             print("\n\n\nAcceso denegado, no es un usuario registrado\n\n\n")
 
+    # Elimina el archivo temporal
+    os.remove(comprobation_image)
+    
 if __name__ == "__main__":
+    current_time = datetime.now()
     main()
     final_time = datetime.now() - current_time
     print("Tardó:", final_time)
