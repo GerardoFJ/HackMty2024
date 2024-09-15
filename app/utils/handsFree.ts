@@ -17,7 +17,7 @@ const useHandsFree = () => {
   const output_audio_ref = useRef<string>("");
   const [focusedButton, setFocusedButton] = useState<[number, number]>([0, 0]); // Focus tracking
   const buttonsRef = useRef<(HTMLButtonElement | null)[][]>([]); // Store button refs in a 2D array
-  const Activated = useRef<boolean>(false);
+  const Activated = useRef<boolean>(true);
 
   // Listen for voice commands
   const handleStartListening = async () => {

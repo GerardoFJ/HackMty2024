@@ -111,6 +111,7 @@ export default function StartScreen() {
     }
 
     useEffect(() => {
+        Activated.current = false;
 
         if(!scaned){
         const scanUser = async () => {
@@ -129,7 +130,12 @@ export default function StartScreen() {
             setScaned(true);
         }
         scanUser();
-}});
+}
+return () => {
+    console.log('Component is being unmounted');
+    // Add any other cleanup logic here
+};
+}, [scaned]);
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-8">

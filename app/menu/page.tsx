@@ -4,9 +4,11 @@ import { Button } from "@nextui-org/react"; // Import the Image component from t
 import Image from 'next/image';
 import { navigateToPage } from "../utils/functions";
 import { useHandsFree } from "../utils/handsFree";
-import { useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
+import { ActivateProvider, ActivateContext } from '../components/ActivateProvider';
 
 const menuPage: React.FC = () => {
+
     const {
         trigger,
         output,
@@ -15,7 +17,27 @@ const menuPage: React.FC = () => {
         buttonsRef,
         handleStartListening,
         fetchRealTimeOutput_Head,
+        Activated
     } = useHandsFree();
+    const scaned = useRef(false);
+    const activateContext = useContext(ActivateContext);
+    if (!activateContext) {
+       throw new Error('useContext must be used within an ActivateProvider');
+     }
+   
+     const { activate, setActivate } = activateContext;
+    useEffect(() => {
+        if(!activate){
+        console.log("Head activated");
+        handleStartListening();
+        fetchRealTimeOutput_Head();
+        
+        }
+    
+    return () => {
+        // Activated.current = false;
+
+    }})
     return (
         <div>
             {/* <Button onClick={faceDetected}>run</Button> */}
