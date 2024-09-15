@@ -10,7 +10,9 @@ import numpy as np
 
 from datetime import datetime
 
-dotenv_path = os.path.join(os.path.dirname(__file__), '../../.env.local')
+testing = False
+
+dotenv_path = os.path.join(os.path.dirname(__file__), '../../../.env.local')
 load_dotenv(dotenv_path)
 
 # Configuration of the MongoDB connection using the environment variable
@@ -86,10 +88,10 @@ def is_user(image_path):
 def capture_image():
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
-        print("The camera could not be opened!")
+        if (testing): print("The camera could not be opened!")
         return None
 
-    print("\n\n\nCapturing Image...\n\n\n")
+    if (testing): print("\n\n\nCapturing Image...\n\n\n")
     
     ret, frame = cap.read()
     cap.release()
@@ -98,7 +100,7 @@ def capture_image():
     files = { "photo": img_encoded.tobytes(),}
 
     if not ret:
-        print("Could not capture the image!")
+        if (testing): print("Could not capture the image!")
         return None
 
     # Create a temporary file to save the captured image
@@ -112,24 +114,27 @@ def main():
 
     response = requests.request("POST", url, headers=headers, files=files)
     response_json = response.json()
-    # print(response_json)
-    if response_json.get("status") == "success": # Check if the face detected is a real face and not a photo before proceeding
-        if is_criminal(comprobation_image):
-            print("\n\n\nSecurity alert! Access denied\n\n\n")
-        else:
-            user = is_user(comprobation_image)
-            if user:
-                print(f"\n\n\nAccess granted to {user}'s account\n\n\n")
-            else:
-                print("\n\n\nAccess denied, not a registered user\n\n\n")
+    if (testing): print(response_json)
+    # if response_json.get("status") == "success": # Check if the face detected is a real face and not a photo before proceeding
+        # if is_criminal(comprobation_image):
+        #     print("\n\n\nSecurity alert! Access denied\n\n\n")
+        # else:
+    user = is_user(comprobation_image)
+    if user:
+        if (testing): print(f"\n\n\nAccess granted to {user}'s account\n\n\n")
+        else: print(user)
     else:
-        print("\n\n\nAccess denied, not a real person\n\n\n")
+        if (testing): print("\n\n\nAccess denied, not a registered user\n\n\n")
+        else: print("Access denied")
+    # else:
+    #     print("\n\n\nAccess denied, not a real person\n\n\n")
 
     # Delete the temporary file of the captured image
     os.remove(comprobation_image)
     
 if __name__ == "__main__":
+    if (testing): print("Starting facial recognition...")
     current_time = datetime.now()
     main()
     final_time = datetime.now() - current_time
-    print("It took:", final_time)
+    if (testing): print("It took:", final_time)

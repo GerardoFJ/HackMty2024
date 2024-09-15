@@ -8,7 +8,6 @@ import { XCircle, Delete, CheckCircle } from 'lucide-react'
 import { navigateToPage } from '../utils/functions'
 
 export default function StartScreen() {
-    
     const [accessibilityMode, setAccessibilityMode] = useState(false);
     const [output, setOutput] = useState<string>("");
     const [trigger, setTrigger] = useState<number>(0);
@@ -138,6 +137,20 @@ export default function StartScreen() {
             buttonsRef.current[row][col]?.focus();
         }
     }, [focusedButton]);
+
+    useEffect(() => {
+        const scanUser = async () => {
+            try {
+                const response = await fetch('/api/runLogin');
+                const data = await response.json();
+                console.log(data);
+            } catch (error) {
+                console.error('Error in facial recognition:', error);
+            }
+        }
+        scanUser();
+    });
+
 
     return (
         <div className="flex flex-col items-center justify-center text-white h-screen bg-radial from-blue-950 to-black">
