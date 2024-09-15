@@ -50,7 +50,7 @@ export default function ATMKeypad({ money = false }) {
         type={money ? "" : "password"}
         value={input}
         readOnly
-        className="text-center text-2xl mb-4"
+        className="text-center text-2xl mb-4 text-black"
         placeholder={money ? "Enter amount" : "Enter PIN"}
       />
       <div className="grid grid-cols-3 gap-2 mb-4">
@@ -77,7 +77,7 @@ export default function ATMKeypad({ money = false }) {
         <CheckCircle className="w-6 h-6 mr-2" /> Submit
       </Button>
       {message && (
-        <p className="mt-4 text-center text-sm font-medium text-gray-700">
+        <p className="mt-4 text-center text-sm font-medium text-gray-500">
           {message}
         </p>
       )}

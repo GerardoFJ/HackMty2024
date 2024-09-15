@@ -3,7 +3,7 @@ import StartScreen from "./components/startScreen";
 
 export default function Home() {
   return (
-    <NextUIProvider>
+    <NextUIProvider className="font-gotham">
         <StartScreen />
     </NextUIProvider>
   );
