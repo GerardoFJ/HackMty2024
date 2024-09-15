@@ -70,6 +70,6 @@ export async function GET(request: Request) {
     headers: { 'Content-Type': 'text/plain', 'Process-Id': id },
   });}
   catch(e){
-    console.log("Error bien cagado asi bien chistoso: ", e);
+    console.log("Error : ", e);
   }
 }
