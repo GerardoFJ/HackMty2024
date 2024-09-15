@@ -26,7 +26,7 @@ const menuPage: React.FC = () => {
     
     return (
         <div>
-            {/* <Button onClick={faceDetected}>run</Button> */}
+            <Button onClick={faceDetected} className="text-lg">run</Button>
             <button ref={(el) => {
                 if (!buttonsRef.current[0]) {
                     buttonsRef.current[0] = [el, el, el, el];
