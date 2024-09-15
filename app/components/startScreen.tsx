@@ -3,6 +3,7 @@
 import { useState } from "react";
 import ATMKeypad from "./pinInput";
 import { SpeechToText } from "../utils/audioRecognition";
+import VisionComponent from "./checkPython";
 
 export default function StartScreen() {
     const [accessibilityMode, setAccessibilityMode] = useState(false);
@@ -28,6 +29,7 @@ export default function StartScreen() {
                 <section className="flex flex-col items-center justify-center">
                     <p className="text-[3rem] text-foreground font-gotham text-gray-500">Please insert your card</p>
                     <button onClick={faceDetected} className="mt-10 bg-white text-black p-4 rounded-lg">Face detected</button>
+                    
                 </section>
             )}
         </div>
