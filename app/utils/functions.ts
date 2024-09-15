@@ -10,6 +10,9 @@ const navigateToPage = (page: string, amount?: number, user?: string) => {
 
 const getUser = () => {
     const searchParams = new URLSearchParams(window.location.search);
+    if (!searchParams.has('user')) {
+        return 'user';
+    }
     return searchParams.get('user');
 }
 

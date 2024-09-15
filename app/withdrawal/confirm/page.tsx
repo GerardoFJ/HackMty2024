@@ -48,7 +48,6 @@ const withdrawalPage: React.FC = () => {
 
     return (
         <div className="overflow-hidden">
-            {/* <Button onClick={faceDetected}>run</Button> */}
         {confirm ? (
                 <section className="flex flex-col items-center bg-radial w-screen text-white font-gotham">
                     <h1 className="mr-8 text-[5rem] py-10 text-center font-bold font-fira"><span className="text-green-500">Withdrawal</span> confirmed</h1>

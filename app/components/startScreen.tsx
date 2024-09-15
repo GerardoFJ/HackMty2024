@@ -6,6 +6,7 @@ import { Input } from "@nextui-org/react"
 import { XCircle, Delete, CheckCircle } from 'lucide-react'
 import { navigateToPage } from '../utils/functions'
 import { useHandsFree } from "../utils/handsFree";
+import Countdown from "./countdown";
 
 export default function StartScreen() {
     const {
@@ -22,6 +23,7 @@ export default function StartScreen() {
     const [input, setInput] = useState('')
     const [message, setMessage] = useState('')
     const [user, setUser] = useState('user')
+    const [shuffledNumbers, setShuffledNumbers] = useState<number[]>([]);
     
     const faceDetected = () => {
         console.log("Face detected");
@@ -86,12 +88,27 @@ export default function StartScreen() {
                 console.error('Error in facial recognition:', error);
             }
         };
+        const shuffleArray = (array: number[]) => {
+            let currentIndex = array.length, randomIndex;
+          
+            // While there remain elements to shuffle...
+            while (currentIndex !== 0) {
+              // Pick a remaining element...
+              randomIndex = Math.floor(Math.random() * currentIndex);
+              currentIndex--;
+          
+              // And swap it with the current element.
+              [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+          
+            setShuffledNumbers(array);
+        };
+        shuffleArray([1, 2, 3, 4, 5, 6, 7, 8, 9]);
         scanUser();
     }, []);
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-8">
-            {/* 18 second timer */}
             <div className="relative h-full w-full bg-slate-950">
                 <div className="absolute bottom-0 left-[-20%] right-0 top-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle_farthest-side,rgba(255,0,182,.15),rgba(255,255,255,0))]"></div>
                 <div className="absolute bottom-0 right-[-20%] top-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle_farthest-side,rgba(255,0,182,.15),rgba(255,255,255,0))]"></div>
@@ -99,6 +116,7 @@ export default function StartScreen() {
             <h1 className="text-[5rem] font-bold text-foreground font-fira">Welcome to <span className="text-green-500">ATechM</span></h1>
             {accessibilityMode ? (
                 <section className="flex flex-col items-center justify-center">
+                    <Countdown targetTime={28} text="gesture detection starts" />
                     <p className="text-[3rem] text-foreground font-gotham text-yellow-500">Accessibility mode activated</p>
                     <div
                     className="max-w-sm mx-auto mt-10 p-6 bg-gray-100 rounded-lg shadow-md"
@@ -112,7 +130,7 @@ export default function StartScreen() {
                         placeholder="Enter PIN"
                     />
                     <div className="grid grid-cols-3 gap-2 mb-4">
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((number, index) => {
+                        {shuffledNumbers.map((number, index) => {
                         const row = Math.floor(index / 3);
                         const col = index % 3;
 
@@ -191,8 +209,9 @@ export default function StartScreen() {
                 </section>
             ) : (
                 <section className="flex flex-col items-center justify-center">
+                    <Countdown targetTime={18} text="faceID picture" />
                     <p className="text-[3rem] text-foreground font-gotham text-gray-500">Please insert your card</p>
-                    <button onClick={faceDetected} className="mt-10 bg-white text-black p-4 rounded-lg">Face detected</button>
+                    {/* <button onClick={faceDetected} className="mt-10 bg-white text-black p-4 rounded-lg">Face detected</button> */}
                 </section>
             )}
         </div>

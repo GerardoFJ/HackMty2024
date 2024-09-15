@@ -1,3 +1,5 @@
+"use client"
+
 import { getUser } from "../utils/functions";
 
 export default function Menu({
@@ -43,7 +45,7 @@ export default function Menu({
         </div>
         <div>{children}</div>
         <div className="mt-8 text-center text-sm text-gray-400 flex flex-col absolute bottom-10 left-0 w-full">
-            <p>Contact center: 0800 7777 | Free SMS: 50223</p>
+            <p>Developed by: Cautines Calientes</p>
         </div>
         </div>
       </main>

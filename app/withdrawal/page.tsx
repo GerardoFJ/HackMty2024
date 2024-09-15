@@ -1,11 +1,11 @@
 "use client"
 
-import { Button } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 import Image from 'next/image';
 import { navigateToPage } from "../utils/functions";
-import { useEffect, useState } from "react";
-import ATMKeypad from "../components/pinInput";
+import { useEffect, useState, useRef } from "react";
 import { useHandsFree } from "../utils/handsFree";
+import { CheckCircle, Delete, XCircle } from "lucide-react";
 
 const withdrawalPage: React.FC = () => {
     const {
@@ -20,6 +20,8 @@ const withdrawalPage: React.FC = () => {
     
     const [amount, setAmount] = useState(0);
     const [otherAmount, setOtherAmount] = useState(false);
+    const [input, setInput] = useState('')
+    const [message, setMessage] = useState('')
 
     useEffect(() => {
         if (amount > 0) {
@@ -33,15 +35,33 @@ const withdrawalPage: React.FC = () => {
         fetchRealTimeOutput();
     }
 
+    const handleNumberClick = (number: number) => {
+        setInput(prev => prev + number)
+    }
+    
+    const handleDelete = () => {
+        setInput(prev => prev.slice(0, -1))
+    }
+    
+    const handleClear = () => {
+        setInput('')
+        setMessage('')
+    }
+    
+    const handleSubmit = () => {
+        if (parseInt(input) > 0) {
+            navigateToPage('withdrawal/confirm', parseInt(input))
+        }
+    }
+
     return (
         <section>
-            {/* <Button onClick={faceDetected}>run</Button> */}
+            <Button onClick={faceDetected} className="text-white text-3xl">run</Button>
             <button ref={(el) => {
                 if (!buttonsRef.current[0]) {
-                    buttonsRef.current[0] = [el];
-                } else {
-                    buttonsRef.current[0][0] = el;
+                    buttonsRef.current[0] = [];
                 }
+                buttonsRef.current[0][0] = el;
             }} onClick={() => navigateToPage("")} className="absolute top-0 left-0 w-12">
                 <Image 
                 src="/assets/leftArrow.png" 
@@ -126,7 +146,77 @@ const withdrawalPage: React.FC = () => {
                     </Button>
                 </section>
             ) : (
-                <ATMKeypad money={true} />
+                <div className="max-w-sm mx-auto mt-10 p-6 bg-gray-100 rounded-lg shadow-md">
+                    <Input
+                        type="text"
+                        value={input}
+                        readOnly
+                        className="text-center text-2xl mb-4 text-black"
+                        placeholder="Enter amount"
+                    />
+                    <div className="grid grid-cols-3 gap-2 mb-4">
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((number, index) => {
+                            const row = Math.floor(index / 3) + 1;
+                            const col = index % 3;
+
+                            return (
+                                <Button
+                                    key={number}
+                                    ref={(el) => {
+                                        // Initialize the row if it doesn't exist
+                                        if (!buttonsRef.current[row]) {
+                                            buttonsRef.current[row] = [];
+                                        }
+                                        // Assign the button reference
+                                        buttonsRef.current[row][col] = el;
+                                    }}
+                                    onClick={() => handleNumberClick(number)}
+                                    className={`text-2xl h-14 ${row === focusedButton[0] && col === focusedButton[1] ? 'bg-blue-500 hover:bg-blue-600' : ''}`}
+                                >
+                                    {number}
+                                </Button>
+                            );
+                        })}
+                        <Button ref={(el) => {
+                            if (!buttonsRef.current[4]) {
+                                buttonsRef.current[4] = [];
+                            }
+                            buttonsRef.current[4][0] = el;
+                        }} onClick={handleClear} className="text-2xl h-14 bg-yellow-500 hover:bg-yellow-600">
+                            <XCircle className="w-6 h-6" />
+                        </Button>
+                        <Button ref={(el) => {
+                            if (!buttonsRef.current[4]) {
+                                buttonsRef.current[4] = [];
+                            }
+                            buttonsRef.current[4][1] = el;
+                        }} onClick={() => handleNumberClick(0)} className="text-2xl h-14">
+                            0
+                        </Button>
+                        <Button ref={(el) => {
+                            if (!buttonsRef.current[4]) {
+                                buttonsRef.current[4] = [];
+                            }
+                            buttonsRef.current[4][2] = el;
+                        }} onClick={handleDelete} className="text-2xl h-14 bg-red-500 hover:bg-red-600">
+                            <Delete className="w-6 h-6" />
+                        </Button>
+                    </div>
+                    <Button 
+                        ref={(el) => {
+                            if (!buttonsRef.current[5]) {
+                                buttonsRef.current[5] = [el, el, el];
+                            }
+                        }}
+                        onClick={handleSubmit} className="w-full text-xl h-14 bg-green-500 hover:bg-green-600">
+                        <CheckCircle className="w-6 h-6 mr-2" /> Submit
+                    </Button>
+                    {message && (
+                        <p className="mt-4 text-center text-sm font-medium text-gray-500">
+                            {message}
+                        </p>
+                    )}
+                </div>
             )}
         </section>
     );
