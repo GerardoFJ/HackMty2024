@@ -47,7 +47,7 @@ export default function ATMKeypad({ money = false }) {
   return (
     <div className="max-w-sm mx-auto mt-10 p-6 bg-gray-100 rounded-lg shadow-md">
       <Input
-        type="password"
+        type={money ? "" : "password"}
         value={input}
         readOnly
         className="text-center text-2xl mb-4"

@@ -1,21 +1,21 @@
-// app/api/runVision/route.ts
-import { NextResponse } from 'next/server';
+// app/api/runVision/route.ts (or pages/api/runVision.ts if using Pages Router)
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import { NextResponse } from 'next/server'; // App Router
+// or use: import type { NextApiRequest, NextApiResponse } from 'next'; // Pages Router
 
-// Promisify exec to use async/await
 const execPromise = promisify(exec);
 
-export async function GET() {
+export async function GET() {  // For App Router; use "handler" for Pages Router
   try {
-    // Update the path to your Python script
-    const { stdout, stderr } = await execPromise('python ./app/utils/script.py');
-
+    // Adjust the path to your Python script
+    const { stdout, stderr } = await execPromise('python ./app/api/runVision/fingerPointer.py');
+    
     if (stderr) {
       return NextResponse.json({ error: stderr }, { status: 500 });
     }
-
-    return NextResponse.json({ output: stdout });
+    
+    return NextResponse.json({ output: stdout }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

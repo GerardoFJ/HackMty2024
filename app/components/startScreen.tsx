@@ -14,11 +14,11 @@ export default function StartScreen() {
 
     return (
         <div className="flex flex-col items-center justify-center text-white h-screen bg-radial from-blue-950 to-black">
-            <h1 className="text-[5rem] font-bold text-foreground font-fira">Welcome to your ATM</h1>
+            <h1 className="text-[5rem] font-bold text-foreground font-fira">Welcome to <span className="text-green-500">ATechM</span></h1>
             {accessibilityMode ? (
                 <section className="flex flex-col items-center justify-center">
                     <p className="text-[3rem] text-foreground font-gotham">Accessibility mode activated</p>
-                    <p className="text-[1.5rem]">Please input your PIN</p>
+                    <p className="text-[1.5rem] text-gray-500">Please input your PIN</p>
                     <ATMKeypad />
                 </section>
             ) : (
@@ -27,6 +27,7 @@ export default function StartScreen() {
                     <button onClick={faceDetected} className="mt-10 bg-white text-black p-4 rounded-lg">Face detected</button>
                 </section>
             )}
+            <VisionComponent />
         </div>
     );
 }

@@ -1,7 +1,7 @@
 "use client"
 
-import { Button } from "@nextui-org/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Spinner } from "@nextui-org/react";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const withdrawalPage: React.FC = () => {
@@ -20,7 +20,7 @@ const withdrawalPage: React.FC = () => {
         <section className="flex flex-col justify-center items-center bg-radial to-black from-blue-950 w-screen h-screen text-white font-gotham">
             <h1 className="text-[5rem] py-10 text-center font-bold font-fira">Withdrawal confirmed</h1>
             <h2 className="text-[3rem] pt-5 text-center">Please take you cash</h2>
-            <h2 className="text-[3rem] pt-5 text-center">Amount: {amountValue}</h2>
+            <h2 className="text-[3rem] pt-5 text-center relative">Amount: {amountValue ? amountValue : <Spinner className="absolute left-52 top-9" />}</h2>
         </section>
     );
 }
