@@ -5,6 +5,7 @@ import { NextResponse } from 'next/server';
 const processMap = new Map<string, ChildProcess>();
 
 export async function GET(request: Request) {
+  try{
   const url = new URL(request.url);
   const width = url.searchParams.get('width');
   const height = url.searchParams.get('height');
@@ -22,7 +23,9 @@ export async function GET(request: Request) {
     }
     return new Response('Process stopped', { status: 200 });
   }
-
+  if(processId){
+    console.log(`Process ID: ${processId}`);
+  }
   
   // Generate a unique ID for the process
   const id = Date.now().toString();
@@ -38,8 +41,14 @@ export async function GET(request: Request) {
   const readableStream = new ReadableStream({
     start(controller) {
       process.stdout.on('data', (data) => {
-        console.log('sending');
-        controller.enqueue(encoder.encode(data)); // Send each chunk of stdout data to the client
+        // console.log('sending');
+        try{
+        const state = controller.enqueue(encoder.encode(data)); 
+        console.log(state)// Send each chunk of stdout data to the client
+        }catch(e){
+          process.kill();
+          processMap.delete(processId || id); // Clean up process reference
+        }
       });
 
       process.stderr.on('data', (data) => {
@@ -59,5 +68,8 @@ export async function GET(request: Request) {
 
   return new Response(readableStream, {
     headers: { 'Content-Type': 'text/plain', 'Process-Id': id },
-  });
+  });}
+  catch(e){
+    console.log("Error bien cagado asi bien chistoso: ", e);
+  }
 }

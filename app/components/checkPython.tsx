@@ -26,6 +26,7 @@ export default function VisionComponent(
   };
   useEffect(() => {
     activateRef.current = activate;
+    console.log(`Activate: ${activate}`);
     if(activateRef.current && !started) {
       setStarted(true);
       console.log('Starting vision script');
@@ -34,28 +35,6 @@ export default function VisionComponent(
 
   }, [activate]);
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   const fetchRealTimeOutput = async () => {
     const width = window.innerWidth;
