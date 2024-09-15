@@ -1,4 +1,9 @@
+'use client'
+import { use, useEffect, useRef, useState } from "react";
+
 // SpeechToText.tsx
+const audioRecogn = () => {
+const audio_transcript = useRef<string>("");
 const SpeechToText = (): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -9,6 +14,7 @@ const SpeechToText = (): Promise<boolean> => {
     recognition.onstart = () => {
       console.log('Speech recognition started');
     };
+
 
     recognition.onend = () => {
       resolve(false);
@@ -22,6 +28,7 @@ const SpeechToText = (): Promise<boolean> => {
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       const transcript = event.results[0][0].transcript;
+      audio_transcript.current = transcript
       console.log('Speech recognition result: ', transcript);
       // Check if "confirm" is in the result
       const keywords = ['confirm', 'approve', 'accept', 'yes', 'ok', 'okay'];
@@ -32,6 +39,15 @@ const SpeechToText = (): Promise<boolean> => {
 
     recognition.start();
   });
-};
 
-export { SpeechToText };
+  useEffect(() => {
+   audio_transcript.current
+  });
+};
+return{
+  SpeechToText,
+  audio_transcript
+}
+}
+
+export {audioRecogn };

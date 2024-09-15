@@ -1,12 +1,13 @@
 "use client"
 
-import { use, useEffect, useRef, useState } from "react";
+import { use, useContext, useEffect, useRef, useState } from "react";
 import { Button } from "@nextui-org/react"
 import { Input } from "@nextui-org/react"
-import { XCircle, Delete, CheckCircle } from 'lucide-react'
+import { XCircle, Delete, CheckCircle, Hand } from 'lucide-react'
 import { navigateToPage } from '../utils/functions'
 import { useHandsFree } from "../utils/handsFree";
-
+import { audioRecogn} from "../utils/audioRecognition";
+import { ActivateProvider, ActivateContext } from './ActivateProvider';
 export default function StartScreen() {
     const {
         trigger,
@@ -15,18 +16,68 @@ export default function StartScreen() {
         focusedButton,
         buttonsRef,
         handleStartListening,
-        fetchRealTimeOutput,
+        getaudioListener,
+        output_audio_ref,
+        fetchRealTimeOutput_Head,
+        Activated
     } = useHandsFree();
 
-    const [accessibilityMode, setAccessibilityMode] = useState(false);
+    const {
+        audio_transcript
+    } = audioRecogn();
+    const [accessAccount, setccessAccount] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const [input, setInput] = useState('')
     const [message, setMessage] = useState('')
-    
-    const faceDetected = () => {
+    const [scaned, setScaned] = useState(false);
+    const flagRef = useRef(true);
+    const accesibility = useRef(0);
+    const activateContext = useContext(ActivateContext);
+ if (!activateContext) {
+    throw new Error('useContext must be used within an ActivateProvider');
+  }
+
+  const { activate, setActivate } = activateContext;
+
+    const faceDetected = async () => {
         console.log("Face detected");
-        handleStartListening();
-        setAccessibilityMode(true);
-        fetchRealTimeOutput();
+        setccessAccount(true);
+        setIsModalVisible(true);
+
+        while(flagRef.current){
+        console.log("Esperando");
+        await getaudioListener();
+        console.log("Audio detectado bien chingon", output_audio_ref.current);
+        if(output_audio_ref.current.includes("one")){
+            
+            accesibility.current = 1;
+            setIsModalVisible(false);
+            flagRef.current = false;
+            break
+        }
+        if(output_audio_ref.current.includes("two")){
+            accesibility.current = 2;
+            setIsModalVisible(false);
+            flagRef.current = false;
+            break
+        }
+
+    }
+        if(accesibility.current == 1){
+            console.log("Cabeza");
+            // setActivate_head(true);
+            Activated.current = true;
+            fetchRealTimeOutput_Head();
+            handleStartListening();
+            
+            // handleStartListening();
+        }
+        if(accesibility.current == 2){
+            console.log("Dedos");
+            setActivate(true);
+        }
+        console.log("Hola que tal");
+        // fetchRealTimeOutput();
     }
 
     const handleNumberClick = (number: number) => {
@@ -60,17 +111,25 @@ export default function StartScreen() {
     }
 
     useEffect(() => {
+
+        if(!scaned){
         const scanUser = async () => {
             try {
-                const response = await fetch('/api/runLogin');
-                const data = await response.json();
+                // const response = await fetch('/api/runLogin');
+                // const data = await response.json();
+                const data = { success: true };
                 console.log(data);
+                if (data.success) {
+                   faceDetected();
+                }
+
             } catch (error) {
                 console.error('Error in facial recognition:', error);
             }
+            setScaned(true);
         }
         scanUser();
-    });
+}});
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-8">
@@ -79,9 +138,8 @@ export default function StartScreen() {
                 <div className="absolute bottom-0 right-[-20%] top-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle_farthest-side,rgba(255,0,182,.15),rgba(255,255,255,0))]"></div>
             </div>
             <h1 className="text-[5rem] font-bold text-foreground font-fira">Welcome to <span className="text-green-500">ATechM</span></h1>
-            {accessibilityMode ? (
+            {accessAccount ? (
                 <section className="flex flex-col items-center justify-center">
-                    <p className="text-[3rem] text-foreground font-gotham text-yellow-500">Accessibility mode activated</p>
                     <div
                     className="max-w-sm mx-auto mt-10 p-6 bg-gray-100 rounded-lg shadow-md"
                     tabIndex={0} // Make the container focusable
@@ -177,6 +235,19 @@ export default function StartScreen() {
                     <button onClick={faceDetected} className="mt-10 bg-white text-black p-4 rounded-lg">Face detected</button>
                 </section>
             )}
+            {isModalVisible && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg">
+                        <p className="text-xl font-bold text-black">Activate Accessibility Mode?</p>
+                        <div className="mt-4 flex justify-end gap-5">
+                            <p className="text-black">Say one for head movements</p>
+                            <p className="text-black">Say two for finger movements</p>
+                        </div>
+                        <button onClick={() => {setIsModalVisible(false); flagRef.current=false}} className="mt-4 bg-green-500 text-white p-2 rounded-lg">Cancel</button>
+                    </div>
+                </div>
+            )}
+            {accesibility.current != 0 && (<p className="text-[3rem] text-foreground font-gotham text-yellow-500">Accessibility mode activated</p>)}
         </div>
     );
 }

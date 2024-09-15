@@ -14,15 +14,8 @@ const menuPage: React.FC = () => {
         focusedButton,
         buttonsRef,
         handleStartListening,
-        fetchRealTimeOutput,
+        fetchRealTimeOutput_Head,
     } = useHandsFree();
-
-    const faceDetected = () => {
-        console.log("Face detected");
-        handleStartListening();
-        fetchRealTimeOutput();
-    }
-    
     return (
         <div>
             {/* <Button onClick={faceDetected}>run</Button> */}

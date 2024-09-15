@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { fira, gotham } from "./utils/fonts";
+import Accesibility from "./components/accesibility";
+import { ActivateProvider } from "./components/ActivateProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,7 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${fira} ${gotham}`}>
+      <ActivateProvider>
+      <Accesibility />
         {children}
+      </ActivateProvider>
       </body>
     </html>
   );
