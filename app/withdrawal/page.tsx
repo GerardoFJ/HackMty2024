@@ -56,6 +56,7 @@ const withdrawalPage: React.FC = () => {
 
     return (
         <section>
+            <Button onClick={faceDetected} className="text-lg">run</Button>
             <button ref={(el) => {
                 if (!buttonsRef.current[0]) {
                     buttonsRef.current[0] = [];

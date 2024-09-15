@@ -24,6 +24,7 @@ export default function StartScreen() {
     const [message, setMessage] = useState('')
     const [user, setUser] = useState('user')
     const [shuffledNumbers, setShuffledNumbers] = useState<number[]>([]);
+    const [login, setLogin] = useState(false);
     
     const faceDetected = () => {
         console.log("Face detected");
@@ -104,7 +105,10 @@ export default function StartScreen() {
             setShuffledNumbers(array);
         };
         shuffleArray([1, 2, 3, 4, 5, 6, 7, 8, 9]);
-        scanUser();
+        if (!login) {
+            scanUser();
+            setLogin(true);
+        }
     }, []);
 
     return (
@@ -196,7 +200,7 @@ export default function StartScreen() {
                             }
                         }}
                         onClick={handleSubmit}
-                        className="w-full text-xl h-14 bg-green-500 hover:bg-green-600"
+                        className={`w-full h-14 bg-green-500 hover:bg-green-600 ${4 === focusedButton[0] ? 'bg-green-600' : ''}`}
                     >
                         <CheckCircle className="w-6 h-6 mr-2" /> Submit
                     </Button>

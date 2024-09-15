@@ -67,7 +67,7 @@ const menuPage: React.FC = () => {
 
             {/* Right Side (Other Options) */}
             <div className="col-span-1 grid grid-cols-2 gap-4">
-                <div className={`bg-gray-800 p-6 rounded-lg flex items-center justify-center ${1 === focusedButton[0] && 1 === focusedButton[1] ? 'bg-gray-700' : ''}`}>
+                <div className={`bg-gray-800 p-6 rounded-lg flex items-center justify-center ${1 === focusedButton[0] && 1 === focusedButton[1] ? 'bg-gray-500' : ''}`}>
                     <Button ref={
                         (el) => {
                             if (!buttonsRef.current[1]) {
@@ -76,7 +76,7 @@ const menuPage: React.FC = () => {
                             buttonsRef.current[1][1] = el;
                         }} onClick={() => navigateToPage("withdrawal")} className="w-full text-center text-lg appearance-none bg-transparent border-none text-white">Balance Inquiry</Button>
                 </div>
-                <div className={`bg-gray-800 p-6 rounded-lg flex items-center justify-center ${1 === focusedButton[0] && 2 === focusedButton[1] ? 'bg-gray-700' : ''}`}>
+                <div className={`bg-gray-800 p-6 rounded-lg flex items-center justify-center ${1 === focusedButton[0] && 2 === focusedButton[1] ? 'bg-gray-500' : ''}`}>
                     <Button ref={
                         (el) => {
                             if (!buttonsRef.current[1]) {
@@ -85,7 +85,7 @@ const menuPage: React.FC = () => {
                             buttonsRef.current[1][2] = el;
                         }} onClick={() => navigateToPage("withdrawal")} className="w-full text-center text-lg appearance-none bg-transparent border-none text-white">Internal Transfer</Button>
                 </div>
-                <div className={`bg-gray-800 p-6 rounded-lg flex items-center justify-center ${2 === focusedButton[0] && 1 === focusedButton[1] ? 'bg-gray-700' : ''}`}>
+                <div className={`bg-gray-800 p-6 rounded-lg flex items-center justify-center ${2 === focusedButton[0] && 1 === focusedButton[1] ? 'bg-gray-500' : ''}`}>
                     <Button ref={
                         (el) => {
                             if (!buttonsRef.current[2]) {
@@ -94,7 +94,7 @@ const menuPage: React.FC = () => {
                             buttonsRef.current[2][1] = el;
                         }} onClick={() => navigateToPage("withdrawal")} className="w-full text-center text-lg appearance-none bg-transparent border-none text-white">PIN Change</Button>
                 </div>
-                <div className={`bg-gray-800 p-6 rounded-lg flex items-center justify-center ${2 === focusedButton[0] && 2 === focusedButton[1] ? 'bg-gray-700' : ''}`}>
+                <div className={`bg-gray-800 p-6 rounded-lg flex items-center justify-center ${2 === focusedButton[0] && 2 === focusedButton[1] ? 'bg-gray-500' : ''}`}>
                     <Button ref={
                         (el) => {
                             if (!buttonsRef.current[2]) {
