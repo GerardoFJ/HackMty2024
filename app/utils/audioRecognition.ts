@@ -1,55 +1,37 @@
-import { useState, useEffect } from 'react';
+// SpeechToText.tsx
+const SpeechToText = (): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 
-const SpeechToText = () => {
-  const [isListening, setIsListening] = useState<boolean>(true);
+    recognition.continuous = false; // Set to false to get a single result
+    recognition.interimResults = false; // Set to false to get final results only
 
-  useEffect(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    
-    if (!SpeechRecognition) {
-      alert('Your browser does not support speech recognition. Please try Google Chrome.');
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.lang = 'en-US';
-
-    const handleStart = () => {
-      setIsListening(true);
+    recognition.onstart = () => {
+      console.log('Speech recognition started');
     };
 
-    const handleEnd = () => {
-      setIsListening(false);
+    recognition.onend = () => {
+      resolve(false);
+      console.log('Speech recognition ended');
     };
 
-    const handleResult = (event: SpeechRecognitionEvent) => {
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const transcriptChunk = event.results[i][0].transcript;
-        
-        // Split the transcript into words
-        const words = transcriptChunk.toLowerCase().split(/\s+/).map(word => word.replace(/[.,]$/, ''));
-        console.log(words);
-        
-        // Check if "confirm" is in the words
-        if (words.includes("confirm")) {
-          // Do something when "confirm" is detected
-          console.log("The word 'confirm' was spoken!");
-        }
+    // recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+    //   console.error('Speech recognition error detected: ' + event.error);
+    //   reject(event.error);
+    // };
+
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      const transcript = event.results[0][0].transcript;
+      console.log('Speech recognition result: ', transcript);
+      // Check if "confirm" is in the result
+      const keywords = ['confirm', 'approve', 'accept', 'yes', 'ok', 'okay'];
+      if (keywords.some(keyword => transcript.toLowerCase().includes(keyword))) {
+        resolve(true);
       }
     };
-    
-    recognition.onstart = handleStart;
-    recognition.onend = handleEnd;
-    recognition.onresult = handleResult;
 
-    if (isListening) {
-      recognition.start();
-    } else {
-      recognition.stop();
-    }
-  }, [isListening]);
+    recognition.start();
+  });
 };
 
 export { SpeechToText };
