@@ -4,6 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { SpeechToText } from "./audioRecognition";
 
 const useHandsFree = () => {
+  const {
+    listen,
+    result,
+    setResult,
+    listening,
+  } = SpeechToText();
   const [trigger, setTrigger] = useState<number>(0);
   const [output, setOutput] = useState<string>("");
   const [click, setClick] = useState(false);
@@ -13,16 +19,25 @@ const useHandsFree = () => {
   // Listen for voice commands
   const handleStartListening = async () => {
     try {
-      const result = await SpeechToText();
-      if (result) {
-        console.log("Confirm detected:", result);
-        setClick(true);
-      }
+      listen();
     } catch (error) {
       console.error("Error in speech recognition:", error);
     }
-    handleStartListening();
   };
+
+  useEffect(() => {
+    if (result) {
+      console.log("Confirm detected:", result);
+      setClick(true);
+      setResult(false);
+    }
+  }, [result])
+
+  useEffect(() => {
+    if (!listening) {
+      handleStartListening();
+    }
+  }, [listening]);
 
   // Click the focused button when the state changes
   useEffect(() => {

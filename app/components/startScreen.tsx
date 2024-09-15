@@ -21,6 +21,7 @@ export default function StartScreen() {
     const [accessibilityMode, setAccessibilityMode] = useState(false);
     const [input, setInput] = useState('')
     const [message, setMessage] = useState('')
+    const [user, setUser] = useState('user')
     
     const faceDetected = () => {
         console.log("Face detected");
@@ -49,7 +50,7 @@ export default function StartScreen() {
             if (input === '1234') {
                 setMessage('PIN correct. Redirecting...')
                 setTimeout(() => {
-                    navigateToPage('menu')
+                    navigateToPage('menu', -1, user)
                 }, 1000)
             } else {
                 setMessage('Incorrect PIN. Please try again.')
@@ -61,19 +62,36 @@ export default function StartScreen() {
 
     useEffect(() => {
         const scanUser = async () => {
+            console.log('Scanning user...');
             try {
                 const response = await fetch('/api/runLogin');
+                
+                // Check if the response is OK (status code 200-299)
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+    
                 const data = await response.json();
-                console.log(data);
+                console.log('Data:', data);
+    
+                // Ensure data and data.output are defined
+                if (data && data.output && data.output.startsWith('Access')) {
+                    console.log('Face detected');
+                    setUser(data.output.split(' ')[2]);
+                    faceDetected();
+                } else {
+                    console.log('No access granted or invalid response format');
+                }
             } catch (error) {
                 console.error('Error in facial recognition:', error);
             }
-        }
+        };
         scanUser();
-    });
+    }, []);
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-8">
+            {/* 18 second timer */}
             <div className="relative h-full w-full bg-slate-950">
                 <div className="absolute bottom-0 left-[-20%] right-0 top-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle_farthest-side,rgba(255,0,182,.15),rgba(255,255,255,0))]"></div>
                 <div className="absolute bottom-0 right-[-20%] top-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle_farthest-side,rgba(255,0,182,.15),rgba(255,255,255,0))]"></div>

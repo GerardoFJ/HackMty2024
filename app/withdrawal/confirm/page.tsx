@@ -18,8 +18,8 @@ const withdrawalPage: React.FC = () => {
         fetchRealTimeOutput,
     } = useHandsFree();
     
-    const [startedAI, setStartedAI] = useState(false);
     const searchParams = useSearchParams();
+    const [startedAI, setStartedAI] = useState(false);
     const [amountValue, setAmountValue] = useState<string | null>(null);
     const [confirm, setConfirm] = useState(false);
 

@@ -4,7 +4,8 @@ import { Button } from "@nextui-org/react"; // Import the Image component from t
 import Image from 'next/image';
 import { navigateToPage } from "../utils/functions";
 import { useHandsFree } from "../utils/handsFree";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 const menuPage: React.FC = () => {
     const {

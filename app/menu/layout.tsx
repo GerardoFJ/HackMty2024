@@ -1,3 +1,9 @@
+"use client"
+
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getUser } from "../utils/functions";
+
 export default function Menu({
     children,
 }: {
@@ -23,7 +29,7 @@ export default function Menu({
         {/* Header */}
         <div className="flex justify-between items-center mb-16 mt-16">
             <div>
-                <h1 className="text-3xl font-bold">{getGreeting()}, User.</h1>
+                <h1 className="text-3xl font-bold">{getGreeting()}, {getUser()}.</h1>
                 <p className="text-sm">Please select your transaction</p>
             </div>
             <div className="text-right">
@@ -36,7 +42,7 @@ export default function Menu({
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V2m0 12V8m-8 4h8m-4-4v4m2 2v4m0-8h8m-4 4v4" />
                     </svg>
                     </div>
-            </div>
+                </div>
             </div>
         </div>
         <div>{children}</div>

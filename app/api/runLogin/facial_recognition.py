@@ -7,10 +7,12 @@ from deepface import DeepFace
 import cv2
 import requests
 import numpy as np
+import json
 
 from datetime import datetime
 
 testing = False
+backends = ['opencv', 'ssd', 'dlib', 'mtcnn']
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '../../../.env.local')
 load_dotenv(dotenv_path)
@@ -20,6 +22,8 @@ uri = os.getenv("MONGO_URI")
 if not uri:
     raise ValueError("MONGO_URI not found in .env file")
 client = MongoClient(uri)
+if not client:
+    raise ValueError("MongoDB connection failed")
 luxand_token = os.getenv("LUXAND_API_KEY")
 if not luxand_token:
     raise ValueError("LUXAND_TOKEN not found in .env file")
@@ -54,7 +58,15 @@ def is_criminal(image_path):
                         temp_image_file.write(photo_data)
 
                     # Compare the captured image with the criminal image
-                    result = DeepFace.verify(img1_path=image_path, img2_path=temp_image_path)
+                    for backend in backends:
+                        try:
+                            result = DeepFace.verify(img1_path=image_path, img2_path=temp_image_path, detector_backend=backend)
+                            if (testing): print(backend, json.dumps(result, indent=2))
+                            break
+                        except Exception as e:
+                            if (testing): print(f"!Error when verifying user image: {e}")
+                            continue
+
                     if result['verified']:
                         return True
     except Exception as e:
@@ -77,7 +89,15 @@ def is_user(image_path):
                         temp_image_file.write(photo_data)
 
                     # Compare the captured image with the user image
-                    result = DeepFace.verify(img1_path=image_path, img2_path=temp_image_path)
+                    for backend in backends:
+                        try:
+                            result = DeepFace.verify(img1_path=image_path, img2_path=temp_image_path, detector_backend=backend)
+                            if (testing): print(backend, json.dumps(result, indent=2))
+                            break
+                        except Exception as e:
+                            if (testing): print(f"!Error when verifying user image: {e}")
+                            continue
+
                     if result['verified']:
                         return user_name
     except Exception as e:
@@ -112,22 +132,24 @@ def capture_image():
 def main():
     comprobation_image, files = capture_image()
 
-    response = requests.request("POST", url, headers=headers, files=files)
-    response_json = response.json()
-    if (testing): print(response_json)
+    # response = requests.request("POST", url, headers=headers, files=files)
+    # response_json = response.json()
+    # if (testing): print(response_json)
     # if response_json.get("status") == "success": # Check if the face detected is a real face and not a photo before proceeding
-        # if is_criminal(comprobation_image):
-        #     print("\n\n\nSecurity alert! Access denied\n\n\n")
-        # else:
-    user = is_user(comprobation_image)
-    if user:
-        if (testing): print(f"\n\n\nAccess granted to {user}'s account\n\n\n")
-        else: print(user)
+    if is_criminal(comprobation_image):
+        if (testing): print("\n\n\nSecurity alert! Access denied\n\n\n")
+        else: print("Security alert! Access denied")
     else:
-        if (testing): print("\n\n\nAccess denied, not a registered user\n\n\n")
-        else: print("Access denied")
+        user = is_user(comprobation_image)
+        if user:
+            if (testing): print(f"\n\n\nAccess granted to {user}'s account\n\n\n")
+            else: print("Access to ", user)
+        else:
+            if (testing): print("\n\n\nAccess denied, not a registered user\n\n\n")
+            else: print("No account! Acess denied")
     # else:
-    #     print("\n\n\nAccess denied, not a real person\n\n\n")
+    #     if (testing): print("\n\n\nAccess denied, not a real person\n\n\n")
+    #     else: print("Access denied")
 
     # Delete the temporary file of the captured image
     os.remove(comprobation_image)

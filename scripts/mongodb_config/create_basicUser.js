@@ -4,7 +4,7 @@ const path = require('path');
 require('dotenv').config();
 
 // Connection configuration
-const uri = process.env.MONGO_URI;
+const uri = 'mongodb+srv://tacolon27:9DpZSCqmoC10ABkf@hackmty2024.90ahx.mongodb.net/?retryWrites=true&w=majority&appName=HackMTY2024';
 if (!uri) {
   throw new Error("MONGO_URI not found in .env file");
 }
@@ -16,15 +16,15 @@ const client = new MongoClient(uri, {
 });
 
 // Image path
-const photoPath = path.join(__dirname, '../imgs', 'users', 'user_image.jpeg');
+const photoPath = path.join(__dirname, '../imgs', 'user_picture.jpg');
 
 const photoBuffer = fs.readFileSync(photoPath);
 
 // Document to be added
 const newDocument = {
-  name: "Name",
+  name: "Gilberto",
   nip: 1234,
-  balance: 0,
+  balance: 100,
   photo: photoBuffer
 };
 

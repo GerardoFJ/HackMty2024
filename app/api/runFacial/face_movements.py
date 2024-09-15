@@ -65,23 +65,23 @@ with mp_face_mesh.FaceMesh(
                 roll = calculate_angle(head_point_r, chin_point_r)
                
                # Draw face landmarks on the frame
-                mp_drawing.draw_landmarks(
-                    image=frame,
-                    landmark_list=face_landmarks,
-                    connections=mp_face_mesh.FACEMESH_TESSELATION,
-                    landmark_drawing_spec=None,
-                    connection_drawing_spec=mp_drawing_styles
-                    .get_default_face_mesh_tesselation_style())
+                # mp_drawing.draw_landmarks(
+                #     image=frame,
+                #     landmark_list=face_landmarks,
+                #     connections=mp_face_mesh.FACEMESH_TESSELATION,
+                #     landmark_drawing_spec=None,
+                #     connection_drawing_spec=mp_drawing_styles
+                #     .get_default_face_mesh_tesselation_style())
                 
                 # Draw lines from reference angle
-                cv2.line(frame, (int(nose_point_p[0]), int(nose_point_p[1])), (int(chin_point_p[0]), int(chin_point_p[1])), (255, 0, 0), 2)
-                cv2.line(frame, (int(head.x*frame.shape[1]), int( head_point_r[0])), (int(chin_point_p[0]), int(chin_point_p[1])), (0, 255, 0), 2)
+                # cv2.line(frame, (int(nose_point_p[0]), int(nose_point_p[1])), (int(chin_point_p[0]), int(chin_point_p[1])), (255, 0, 0), 2)
+                # cv2.line(frame, (int(head.x*frame.shape[1]), int( head_point_r[0])), (int(chin_point_p[0]), int(chin_point_p[1])), (0, 255, 0), 2)
                 
                 # Display the pitch and roll 
-                cv2.putText(frame, f"Pitch angle: {int(pitch)} degrees", (50, 50), 
-                            cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-                cv2.putText(frame, f"Roll angle: {int(roll)} degrees", (50, 100), 
-                            cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+                # cv2.putText(frame, f"Pitch angle: {int(pitch)} degrees", (50, 50), 
+                #             cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+                # cv2.putText(frame, f"Roll angle: {int(roll)} degrees", (50, 100), 
+                #             cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
                 # Convert pitch and roll to integers for practisity
                 pitch = int(pitch)
@@ -107,7 +107,7 @@ with mp_face_mesh.FaceMesh(
                 
                  
         # Display the result
-        cv2.imshow('MediaPipe FaceMesh with Angle', frame)
+        # cv2.imshow('MediaPipe FaceMesh with Angle', frame)
 
         # Break the loop on pressing 'q'
         if cv2.waitKey(5) & 0xFF == ord('q'):

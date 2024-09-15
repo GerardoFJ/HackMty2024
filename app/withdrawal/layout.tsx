@@ -1,3 +1,5 @@
+import { getUser } from "../utils/functions";
+
 export default function Menu({
     children,
 }: {
@@ -23,7 +25,7 @@ export default function Menu({
         {/* Header */}
         <div className="flex justify-between items-center mt-16">
             <div>
-                <h1 className="text-3xl font-bold">{getGreeting()}, User.</h1>
+                <h1 className="text-3xl font-bold">{getGreeting()}, {getUser()}.</h1>
                 <p className="text-sm">Choose amount</p>
             </div>
             <div className="text-right">
