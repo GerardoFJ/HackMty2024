@@ -10,13 +10,17 @@ import numpy as np
 
 from datetime import datetime
 
-load_dotenv()
+dotenv_path = os.path.join(os.path.dirname(__file__), '../../.env.local')
+load_dotenv(dotenv_path)
 
 # Configuration of the MongoDB connection using the environment variable
 uri = os.getenv("MONGO_URI")
 if not uri:
     raise ValueError("MONGO_URI not found in .env file")
 client = MongoClient(uri)
+luxand_token = os.getenv("LUXAND_API_KEY")
+if not luxand_token:
+    raise ValueError("LUXAND_TOKEN not found in .env file")
 db = client["ATechM"]
 criminals_collection = db["criminalsCollection"]
 users_collection = db["usersCollection"]
@@ -24,7 +28,7 @@ users_collection = db["usersCollection"]
 # API endpoint and headers
 url = "https://api.luxand.cloud/photo/liveness/v2" 
 headers = {
-    "token": "TOKEN_HERE",
+    "token": luxand_token,
 }
 
 # Function to convert images from MongoDB to bytes
@@ -108,7 +112,7 @@ def main():
 
     response = requests.request("POST", url, headers=headers, files=files)
     response_json = response.json()
-
+    # print(response_json)
     if response_json.get("status") == "success": # Check if the face detected is a real face and not a photo before proceeding
         if is_criminal(comprobation_image):
             print("\n\n\nSecurity alert! Access denied\n\n\n")
