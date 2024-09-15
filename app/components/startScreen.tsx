@@ -31,8 +31,10 @@ export default function StartScreen() {
     const [message, setMessage] = useState('')
     const [scaned, setScaned] = useState(false);
     const flagRef = useRef(true);
+    const [user, setUser] = useState('user')
     const accesibility = useRef(0);
     const activateContext = useContext(ActivateContext);
+    const [shuffledNumbers, setShuffledNumbers] = useState<number[]>([]);
  if (!activateContext) {
     throw new Error('useContext must be used within an ActivateProvider');
   }
@@ -111,17 +113,44 @@ export default function StartScreen() {
     }
 
     useEffect(() => {
+        const shuffleArray = (array: number[]) => {
+            let currentIndex = array.length, randomIndex;
+          
+            // While there remain elements to shuffle...
+            while (currentIndex !== 0) {
+              // Pick a remaining element...
+              randomIndex = Math.floor(Math.random() * currentIndex);
+              currentIndex--;
+          
+              // And swap it with the current element.
+              [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+          
+            setShuffledNumbers(array);
+        };
+        shuffleArray([1, 2, 3, 4, 5, 6, 7, 8, 9]);
         Activated.current = false;
 
         if(!scaned){
         const scanUser = async () => {
             try {
-                // const response = await fetch('/api/runLogin');
-                // const data = await response.json();
-                const data = { success: true };
-                console.log(data);
-                if (data.success) {
-                   faceDetected();
+                const response = await fetch('/api/runLogin');
+                
+                // Check if the response is OK (status code 200-299)
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+    
+                const data = await response.json();
+                console.log('Data:', data);
+    
+                // Ensure data and data.output are defined
+                if (data && data.output && data.output.startsWith('Access')) {
+                    console.log('Face detected');
+                    setUser(data.output.split(' ')[2]);
+                    faceDetected();
+                } else {
+                    console.log('No access granted or invalid response format');
                 }
 
             } catch (error) {
@@ -129,6 +158,10 @@ export default function StartScreen() {
             }
             setScaned(true);
         }
+
+
+        
+        
         scanUser();
 }
 return () => {
@@ -158,7 +191,7 @@ return () => {
                         placeholder="Enter PIN"
                     />
                     <div className="grid grid-cols-3 gap-2 mb-4">
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((number, index) => {
+                        {shuffledNumbers.map((number, index) => {
                         const row = Math.floor(index / 3);
                         const col = index % 3;
 
