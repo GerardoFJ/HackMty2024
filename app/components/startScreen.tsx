@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import ATMKeypad from "./pinInput";
-import VisionComponent from "./checkPython";
-import Image from 'next/image';
+import { SpeechToText } from "../utils/audioRecognition";
 
 export default function StartScreen() {
     const [accessibilityMode, setAccessibilityMode] = useState(false);
@@ -12,6 +11,8 @@ export default function StartScreen() {
         console.log("Face detected");
         setAccessibilityMode(true);
     }
+
+    SpeechToText();
 
     return (
         <div className="flex flex-col items-center justify-center text-white h-screen bg-radial from-blue-950 to-black">
