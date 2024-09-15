@@ -52,7 +52,7 @@ export default function StartScreen() {
             if (input === '1234') {
                 setMessage('PIN correct. Redirecting...')
                 setTimeout(() => {
-                    navigateToPage('menu', -1, user)
+                    navigateToPage('menu', 0, user)
                 }, 1000)
             } else {
                 setMessage('Incorrect PIN. Please try again.')
