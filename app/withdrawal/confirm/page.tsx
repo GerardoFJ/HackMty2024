@@ -19,6 +19,15 @@ const withdrawalPage: React.FC = () => {
         }
     }, [searchParams]);
 
+    useEffect(() => {
+        if (confirm) {
+            const timer = setTimeout(() => {
+                navigateToPage("");
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [confirm]);
+
     return (
         <div className="h-screen w-screen overflow-hidden">
         {confirm ? (
@@ -26,6 +35,7 @@ const withdrawalPage: React.FC = () => {
                     <h1 className="text-[5rem] py-10 text-center font-bold font-fira"><span className="text-green-500">Withdrawal</span> confirmed</h1>
                     <h2 className="text-[3rem] pt-5 text-center text-gray-500">Please take you cash</h2>
                     <h2 className="text-[3rem] pt-5 text-center relative">Amount: ${amountValue ? amountValue : <Spinner className="absolute left-52 top-9" />}</h2>
+
                 </section>
             ) : (
                 <section className="flex flex-col justify-center items-center bg-radial to-black from-blue-950 w-screen h-screen text-white font-gotham">

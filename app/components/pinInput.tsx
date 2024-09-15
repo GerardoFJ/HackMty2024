@@ -1,6 +1,4 @@
-'use client'
-
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from "@nextui-org/react"
 import { Input } from "@nextui-org/react"
 import { XCircle, Delete, CheckCircle } from 'lucide-react'
@@ -9,6 +7,14 @@ import { navigateToPage } from '../utils/functions'
 export default function ATMKeypad({ money = false }) {
   const [input, setInput] = useState('')
   const [message, setMessage] = useState('')
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigateToPage("") // Replace 'home' with the actual home page URL
+    }, 20000) // 20 seconds
+
+    return () => clearTimeout(timer)
+  }, [])
 
   const handleNumberClick = (number: number) => {
     if (input.length < 4 && !money) {
@@ -32,7 +38,7 @@ export default function ATMKeypad({ money = false }) {
         if (input === '1234') {
             setMessage('PIN correct. Redirecting...')
             setTimeout(() => {
-                window.location.href = '/menu'
+                navigateToPage('menu') // Replace 'menu' with the actual menu page URL
             }, 1000)
         } else {
             setMessage('Incorrect PIN. Please try again.')
